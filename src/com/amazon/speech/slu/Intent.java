@@ -13,6 +13,7 @@
 
 package com.amazon.speech.slu;
 
+import com.amazon.speech.speechlet.interfaces.dialog.directive.ConfirmationStatus;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +52,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public final class Intent {
     private final String name;
+    private final ConfirmationStatus confirmationStatus;
     private final Map<String, Slot> slots;
 
     /**
@@ -70,6 +72,7 @@ public final class Intent {
      */
     private Intent(final Builder builder) {
         name = builder.name;
+        confirmationStatus = builder.confirmationStatus;
         slots = Collections.unmodifiableMap(builder.slots);
     }
 
@@ -83,7 +86,25 @@ public final class Intent {
      */
     private Intent(@JsonProperty("name") final String name,
             @JsonProperty("slots") final Map<String, Slot> slots) {
+        this(name, null, slots);
+    }
+
+    /**
+     * Private constructor used for JSON serialization.
+     *
+     * @param name
+     *            the intent name
+     * @param status
+     *            the confirmation status
+     * @param slots
+     *            the slots associated with the intent
+     */
+    private Intent(
+        @JsonProperty("name") final String name,
+        @JsonProperty("confirmationStatus") final ConfirmationStatus status,
+        @JsonProperty("slots") final Map<String, Slot> slots) {
         this.name = name;
+        this.confirmationStatus = status;
 
         if (slots != null) {
             this.slots = Collections.unmodifiableMap(slots);
@@ -99,6 +120,15 @@ public final class Intent {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Returns the confirmation status of this intent.
+     *
+     * @return the confirmation status
+     */
+    public ConfirmationStatus getConfirmationStatus() {
+        return confirmationStatus;
     }
 
     /**
@@ -127,6 +157,7 @@ public final class Intent {
      */
     public static final class Builder {
         private String name;
+        private ConfirmationStatus confirmationStatus;
         private final Map<String, Slot> slots = new HashMap<>();
 
         private Builder() {
@@ -134,6 +165,11 @@ public final class Intent {
 
         public Builder withName(final String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder withConfirmationStatus(final ConfirmationStatus status) {
+            this.confirmationStatus = status;
             return this;
         }
 

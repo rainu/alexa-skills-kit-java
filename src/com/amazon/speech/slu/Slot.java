@@ -13,9 +13,9 @@
 
 package com.amazon.speech.slu;
 
-import org.apache.commons.lang3.Validate;
-
+import com.amazon.speech.speechlet.interfaces.dialog.directive.ConfirmationStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.Validate;
 
 /**
  * <p>
@@ -59,6 +59,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public final class Slot {
     private final String name;
+    private final ConfirmationStatus confirmationStatus;
     private final String value;
 
     /**
@@ -78,6 +79,7 @@ public final class Slot {
      */
     private Slot(final Builder builder) {
         name = builder.name;
+        confirmationStatus = builder.confirmationStatus;
         value = builder.value;
     }
 
@@ -89,8 +91,28 @@ public final class Slot {
      * @param value
      *            the resolved value
      */
-    private Slot(@JsonProperty("name") final String name, @JsonProperty("value") final String value) {
+    private Slot(
+        @JsonProperty("name") final String name,
+        @JsonProperty("value") final String value) {
+        this(name, null, value);
+    }
+
+    /**
+     * Private constructor used for JSON serialization.
+     *
+     * @param name
+     *            the slot name
+     * @param status
+     *            the confirmation status
+     * @param value
+     *            the resolved value
+     */
+    private Slot(
+        @JsonProperty("name") final String name,
+        @JsonProperty("confirmationStatus") final ConfirmationStatus status,
+        @JsonProperty("value") final String value) {
         this.name = name;
+        this.confirmationStatus = status;
         this.value = value;
     }
 
@@ -101,6 +123,15 @@ public final class Slot {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Returns the confirmation status of this intent.
+     *
+     * @return the confirmation status
+     */
+    public ConfirmationStatus getConfirmationStatus() {
+        return confirmationStatus;
     }
 
     /**
@@ -117,6 +148,7 @@ public final class Slot {
      */
     public static final class Builder {
         private String name;
+        private ConfirmationStatus confirmationStatus;
         private String value;
 
         private Builder() {
@@ -124,6 +156,11 @@ public final class Slot {
 
         public Builder withName(final String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder withConfirmationStatus(final ConfirmationStatus status) {
+            this.confirmationStatus = status;
             return this;
         }
 
