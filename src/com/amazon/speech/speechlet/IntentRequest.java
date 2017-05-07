@@ -50,7 +50,7 @@ public class IntentRequest extends CoreSpeechletRequest {
     private IntentRequest(final Builder builder) {
         super(builder);
         this.intent = builder.intent;
-        this.dialogState = null;
+        this.dialogState = builder.dialogState;
     }
 
     /**
@@ -99,12 +99,18 @@ public class IntentRequest extends CoreSpeechletRequest {
      */
     public static final class Builder extends SpeechletRequestBuilder<Builder, IntentRequest> {
         private Intent intent;
+        private DialogState dialogState;
 
         private Builder() {
         }
 
         public Builder withIntent(final Intent intent) {
             this.intent = intent;
+            return this;
+        }
+
+        public Builder withDialogState(final DialogState dialogState) {
+            this.dialogState = dialogState;
             return this;
         }
 
