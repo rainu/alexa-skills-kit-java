@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("IntentRequest")
 public class IntentRequest extends CoreSpeechletRequest {
     private final Intent intent;
+    private final DialogState dialogState;
 
     /**
      * Returns a new builder instance used to construct a new {@code IntentRequest}.
@@ -49,6 +50,7 @@ public class IntentRequest extends CoreSpeechletRequest {
     private IntentRequest(final Builder builder) {
         super(builder);
         this.intent = builder.intent;
+        this.dialogState = null;
     }
 
     /**
@@ -63,11 +65,16 @@ public class IntentRequest extends CoreSpeechletRequest {
      * @param intent
      *            the intent to handle
      */
-    protected IntentRequest(@JsonProperty("requestId") final String requestId,
-            @JsonProperty("timestamp") final Date timestamp,
-            @JsonProperty("locale") final Locale locale, @JsonProperty("intent") final Intent intent) {
+    protected IntentRequest(
+        @JsonProperty("requestId") final String requestId,
+        @JsonProperty("timestamp") final Date timestamp,
+        @JsonProperty("dialogState") final DialogState dialogState,
+        @JsonProperty("locale") final Locale locale,
+        @JsonProperty("intent") final Intent intent) {
+
         super(requestId, timestamp, locale);
         this.intent = intent;
+        this.dialogState = dialogState;
     }
 
     /**
@@ -81,6 +88,10 @@ public class IntentRequest extends CoreSpeechletRequest {
      */
     public Intent getIntent() {
         return intent;
+    }
+
+    public DialogState getDialogState() {
+        return dialogState;
     }
 
     /**

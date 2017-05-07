@@ -88,20 +88,6 @@ public final class Slot {
      *
      * @param name
      *            the slot name
-     * @param value
-     *            the resolved value
-     */
-    private Slot(
-        @JsonProperty("name") final String name,
-        @JsonProperty("value") final String value) {
-        this(name, null, value);
-    }
-
-    /**
-     * Private constructor used for JSON serialization.
-     *
-     * @param name
-     *            the slot name
      * @param status
      *            the confirmation status
      * @param value

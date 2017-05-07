@@ -81,19 +81,6 @@ public final class Intent {
      *
      * @param name
      *            the intent name
-     * @param slots
-     *            the slots associated with the intent
-     */
-    private Intent(@JsonProperty("name") final String name,
-            @JsonProperty("slots") final Map<String, Slot> slots) {
-        this(name, null, slots);
-    }
-
-    /**
-     * Private constructor used for JSON serialization.
-     *
-     * @param name
-     *            the intent name
      * @param status
      *            the confirmation status
      * @param slots
@@ -157,7 +144,7 @@ public final class Intent {
      */
     public static final class Builder {
         private String name;
-        private ConfirmationStatus confirmationStatus;
+        private ConfirmationStatus confirmationStatus = ConfirmationStatus.NONE;
         private final Map<String, Slot> slots = new HashMap<>();
 
         private Builder() {

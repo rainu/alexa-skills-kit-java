@@ -13,6 +13,11 @@
 
 package com.amazon.speech.speechlet;
 
+import com.amazon.speech.slu.Intent;
+import com.amazon.speech.speechlet.interfaces.dialog.directive.ConfirmIntentDirective;
+import com.amazon.speech.speechlet.interfaces.dialog.directive.DelegateDirective;
+import com.amazon.speech.speechlet.interfaces.dialog.directive.ElicitSlotDirective;
+import java.util.Arrays;
 import java.util.List;
 
 import com.amazon.speech.ui.Card;
@@ -231,6 +236,59 @@ public class SpeechletResponse {
 
         SpeechletResponse response = newAskResponse(outputSpeech, reprompt);
         response.setCard(card);
+        return response;
+    }
+
+    public static SpeechletResponse newDialogDelegateResponse(){
+        SpeechletResponse response = new SpeechletResponse();
+        response.setShouldEndSession(false);
+        response.setDirectives(Arrays.<Directive>asList(new DelegateDirective()));
+
+        return response;
+    }
+
+    public static SpeechletResponse newDialogElicitSlotResponse(Intent intent, String slotToElicit){
+        SpeechletResponse response = new SpeechletResponse();
+        response.setShouldEndSession(false);
+
+        ElicitSlotDirective elicitSlotDirective = new ElicitSlotDirective(slotToElicit);
+        elicitSlotDirective.setUpdatedIntent(intent);
+        response.setDirectives(Arrays.<Directive>asList(elicitSlotDirective));
+
+        return response;
+    }
+
+    public static SpeechletResponse newDialogConfirmIntentResponse(final OutputSpeech speech) {
+        if (speech == null) {
+            throw new IllegalArgumentException("OutputSpeech cannot be null");
+        }
+
+        SpeechletResponse response = new SpeechletResponse();
+        response.setOutputSpeech(speech);
+        response.setShouldEndSession(false);
+
+        ConfirmIntentDirective confirmIntentDirective = new ConfirmIntentDirective();
+        response.setDirectives(Arrays.<Directive>asList(confirmIntentDirective));
+
+        return response;
+    }
+
+    public static SpeechletResponse newDialogConfirmIntentResponse(final OutputSpeech speech, final Intent intent) {
+        if (speech == null) {
+            throw new IllegalArgumentException("OutputSpeech cannot be null");
+        }
+        if (intent == null) {
+            throw new IllegalArgumentException("Intent cannot be null");
+        }
+
+        SpeechletResponse response = new SpeechletResponse();
+        response.setOutputSpeech(speech);
+        response.setShouldEndSession(false);
+
+        ConfirmIntentDirective confirmIntentDirective = new ConfirmIntentDirective();
+        confirmIntentDirective.setUpdatedIntent(intent);
+        response.setDirectives(Arrays.<Directive>asList(confirmIntentDirective));
+
         return response;
     }
 }
