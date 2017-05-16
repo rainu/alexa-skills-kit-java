@@ -247,6 +247,17 @@ public class SpeechletResponse {
         return response;
     }
 
+    public static SpeechletResponse newDialogDelegateResponse(Intent intent){
+        SpeechletResponse response = new SpeechletResponse();
+        response.setShouldEndSession(false);
+
+        DelegateDirective delegateDirective = new DelegateDirective();
+        delegateDirective.setUpdatedIntent(intent);
+        response.setDirectives(Arrays.<Directive>asList(delegateDirective));
+
+        return response;
+    }
+
     public static SpeechletResponse newDialogElicitSlotResponse(Intent intent, String slotToElicit){
         SpeechletResponse response = new SpeechletResponse();
         response.setShouldEndSession(false);
